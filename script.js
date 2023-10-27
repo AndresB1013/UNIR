@@ -131,28 +131,28 @@ svg.selectAll("circle")
         elementoUl.append("li").text(d.Agno + " - " + d.Parametro + " => " + d.Valor);
     })
 
-    // function loadTheme() {
-    //     const theme = localStorage.getItem("theme") || "light";
-    //     document.body.dataset.bsTheme = theme;
-    //     if (theme == "dark") {
-    //         changeThemeBtn.textContent = "Light Mode";
-    //     } else {
-    //         changeThemeBtn.textContent = "Dark Mode";
-    //     }
-    // }
+    function loadTheme() {
+        const theme = localStorage.getItem("theme") || "light";
+        document.body.dataset.bsTheme = theme;
+        if (theme == "dark") {
+            changeThemeBtn.textContent = "Light Mode";
+        } else {
+            changeThemeBtn.textContent = "Dark Mode";
+        }
+    }
 
-    // changeThemeBtn.addEventListener("click", function () {
-    //     let body = document.body;
-    //     if (body.dataset.bsTheme == "dark") {
-    //         body.dataset.bsTheme = "light";
-    //         changeThemeBtn.textContent = "Dark Mode";
-    //         localStorage.setItem("theme", "light");
-    //     } else {
-    //         body.dataset.bsTheme = "dark";
-    //         changeThemeBtn.textContent = "Light Mode";
-    //         localStorage.setItem("theme", "dark");
-    //     }
-    // });
+    changeThemeBtn.addEventListener("click", function () {
+        let body = document.body;
+        if (body.dataset.bsTheme == "dark") {
+            body.dataset.bsTheme = "light";
+            changeThemeBtn.textContent = "Dark Mode";
+            localStorage.setItem("theme", "light");
+        } else {
+            body.dataset.bsTheme = "dark";
+            changeThemeBtn.textContent = "Light Mode";
+            localStorage.setItem("theme", "dark");
+        }
+    });
 
 
     console.log(vivienda_nueva_filtrada);
