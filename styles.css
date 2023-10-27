@@ -1,0 +1,30 @@
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+h1{
+    color: whitesmoke;
+}
+
+header{
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    justify-items: center;
+    align-items: center;
+    background-color: #1c97c1;
+    color: white;
+}
+
+footer{
+    display: grid;
+    grid-template-columns: 1.5 fr 1.5 fr;
+    height: 200px;
+    background-color: black;
+    color: white;
+}
+
+footer ul {
+    list-style: none;
+    padding: 20px;
+    display: flex;
+}
