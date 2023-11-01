@@ -9,7 +9,7 @@
 
     const width = 800;
     const height = 400;
-    const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+    const margin = { top: 20, right: 40, bottom: 40, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -27,7 +27,8 @@
             .style("-webkit-tap-highlight-color", "transparent")
             .style("overflow", "visible");
 
-            svg.append("path");
+        svg.append("path");
+
         svg.append("g").attr("class", "x-axis");
 
         svg.append("g").attr("class", "y-axis");
@@ -116,28 +117,28 @@
                 .attr("dx", "-.8em") // Ajusta la posición horizontal
                 .attr("dy", ".15em"); // Ajusta la posición vertical;
 
-            const tooltip = d3.selectAll("svg")
-                .append("div")
+            const tooltip = svg
+                .append("g")
                 .attr("class", "tooltip")
-                .style("opacity", 0);
+                .style("opacity", 0.5);
 
             const tooltipWidth = 150; // Ancho del tooltip
             const tooltipHeight = 50; // Altura del tooltip
 
             tooltip.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
                 .attr("width", tooltipWidth)
                 .attr("height", tooltipHeight)
-                .attr("fill", "black")
-                .attr("stroke", "gray");
+                .attr("fill", "white")
+                .attr("stroke", "gray")
+                .text("Soy Tooltip")
+                .style("opacity", 0.5);
 
-            const textValue = tooltip.select("rect")
+            const textValue = svg.select("g.tooltip")
                 .append("text")
                 .attr("x", 10)
                 .attr("y", 20);
 
-            const textParameter = tooltip.select("rect").append("text")
+            const textParameter = svg.select("g.tooltip").append("text")
                 .attr("x", 10)
                 .attr("y", 40);
 
@@ -147,14 +148,15 @@
                     const xPos = xScale(convertirAMes(d.Parametro) + " - " + d.Agno) + 17;
                     const yPos = yScale(d.Valor);
 
-                    tooltip.transition().duration(200).style("opacity", 0.9);
-
                     tooltip.style("display", "block")
-                        .attr("transform", `translate(${xPos},${yPos})`);
+                    .attr("transform", `translate(${xPos},${yPos})`);
 
                     textValue.text(`Variacion: ${d.Valor.toFixed(2)} %`);
+
                     textParameter.text(`Mes: ${convertirAMes(d.Parametro) + " - " + d.Agno}`);
+                    tooltip.transition().duration(200).style("opacity", 0.9);
                 })
+
                 .on("mouseout", function () {
                     tooltip.style("display", "none");
                     tooltip.style("opacity", 0);
