@@ -73,14 +73,20 @@ button::before{
 }
 
 footer{
+    padding: 10px 20px;
     display: grid;
     grid-template-columns: 1.5 fr 1.5 fr;
-    height: 200px;
+    gap: 12px;
+    height: fit-content;
     background-color: black;
     color: white;
 }
 
 footer ul {
+    display: flex;
+    text-align: center;
+    align-content: center;
+    gap: 50px;
     list-style: none;
     padding: 20px;
     display: flex;
