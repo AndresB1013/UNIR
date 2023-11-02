@@ -42,6 +42,10 @@ main{
     margin: 10px;
 }
 
+span{
+    text-align: center;
+}
+
 #line{
     text-align: center;
 }
