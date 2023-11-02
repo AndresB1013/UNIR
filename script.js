@@ -4,11 +4,11 @@
     const BtnCambiarTema = d3.select("#changeThemeBtn");
     const Año = d3.select("#filtro");
     let Tema = d3.select("#Tema");
-    const graficos = d3.select("#container");
+    const graficos = d3.select("#contenedor");
     const Titulo = d3.select("#Titulo");
 
-    const width = 800;
-    const height = 400;
+    const width = 1600;
+    const height = (width/2) + 100;
     const margin = { top: 20, right: 40, bottom: 40, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
@@ -22,7 +22,7 @@
             .append("svg")
             .attr("width", width)
             .attr("height", height)
-            .attr("viewBox", [0, 0, width + 50, height + 50])
+            .attr("viewBox", [0, 0, width, height + 50])
             .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
             .style("-webkit-tap-highlight-color", "transparent")
             .style("overflow", "visible");
@@ -81,6 +81,7 @@
                 .attr("fill", "none")
                 .attr("stroke", color)
                 .attr("stroke-width", 1.5)
+                .attr("width", innerWidth)
                 .attr("d", line(filtro_año))
                 .style("stroke-dasharray", function () {
                     return this.getTotalLength() + " " + this.getTotalLength();
@@ -112,10 +113,14 @@
 
             //ETIQUETAS DEL EJE X
             svg.selectAll(".x-axis text") // Selecciona las etiquetas del eje X
-                .style("text-anchor", "end") // Alinea el texto al final del elemento
+                .style("text-anchor", "end")
+                .style("font-size","large") // Alinea el texto al final del elemento
                 .attr("transform", "rotate(-45)") // Rota el texto en sentido antihorario
                 .attr("dx", "-.8em") // Ajusta la posición horizontal
                 .attr("dy", ".15em"); // Ajusta la posición vertical;
+
+            svg.selectAll(".y-axis text")
+            .style("font-size","large");
 
             const tooltip = svg
                 .append("g")
@@ -135,10 +140,12 @@
 
             const textValue = svg.select("g.tooltip")
                 .append("text")
+                .style("font-size","large")
                 .attr("x", 10)
                 .attr("y", 20);
 
             const textParameter = svg.select("g.tooltip").append("text")
+            .style("font-size","large")
                 .attr("x", 10)
                 .attr("y", 40);
 

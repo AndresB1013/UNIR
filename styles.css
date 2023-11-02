@@ -28,9 +28,11 @@ main{
     align-items: center;
     border: black 2px dashed;
     padding: 25px;
-    margin: 20px;
-    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* width: 100%; */
 }
+
 .selector div{
     display: grid;
     justify-items: center;
@@ -38,6 +40,16 @@ main{
     gap: 12px;
     width: 100%;
     margin: 10px;
+}
+
+#line{
+    text-align: center;
+}
+
+svg{
+    margin: 0px;
+    /* padding: 0px; */
+    text-align: center;
 }
 
 .tooltip{
@@ -70,6 +82,10 @@ button::before{
     border-radius: 10px;
     filter: blur(8px);
     animation: glowing 20s linear infinite;
+}
+
+#contenedor{
+    width: 100%;
 }
 
 footer{
