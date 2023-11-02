@@ -127,7 +127,7 @@
                 .attr("class", "tooltip")
                 .style("opacity", 0.5);
 
-            const tooltipWidth = 150; // Ancho del tooltip
+            const tooltipWidth = 200; // Ancho del tooltip
             const tooltipHeight = 50; // Altura del tooltip
 
             tooltip.append("rect")
