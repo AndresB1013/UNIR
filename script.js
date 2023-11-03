@@ -7,60 +7,72 @@
     const graficos = d3.select("#contenedor");
     const Titulo = d3.select("#Titulo");
 
+    // Definición de tamaños del espacio para el grafico
     const width = 1600;
     const height = (width/2) + 100;
     const margin = { top: 20, right: 40, bottom: 40, left: 40 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
+    // Ocultar la estiqueta HTML donde ira el grafico
     graficos.style("display", "none");
 
+    // Crear funcion para cargar datos y el tema de la pagina
     function loadData(b, filtro,color) {
         loadTheme();
 
+        // Difinir la etiqueta SVG donde se incluira el grafico de lineas
         var svg = d3.select("#line")
             .append("svg")
             .attr("width", width)
             .attr("height", height)
             .attr("viewBox", [0, 0, width, height + 50])
-            .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+            .attr("style", "max-width: 100%; height: auto")
             .style("-webkit-tap-highlight-color", "transparent")
             .style("overflow", "visible");
 
+        // Agregar etiqueta HTML donde se pintara el grafico
         svg.append("path");
 
+        // Agregar etiqueta HTML que mostrara el Eje X
         svg.append("g").attr("class", "x-axis");
 
+        // Agregar etiqueta HTML que mostrara el Eje Y
         svg.append("g").attr("class", "y-axis");
 
-
+        // Ejecutar Promesa para lectura de datos de la fuente
         d3.json("indicadores_del_mercado_inmobiliario.json").then(data => {
             var vivienda = data.Respuesta.Datos.Metricas[b].Datos;
 
-            var elementoUl = d3.select("#line").append("ul");
+            // Crear funcion para filtrar datos segun el numero escogido en el Input
             var filtro_año = vivienda.filter(function (d) {
                 return new Date(d.Agno) >= filtro;
             })
 
+            // Definir la escala de datos del eje X
             const xScale = d3.scaleBand()
                 .domain(filtro_año.map(d => convertirAMes(d.Parametro) + " - " + d.Agno))
                 .range([margin.left, width - margin.right])
                 .padding(0.1);
 
+            // Definir la escala de datos del eje Y
             const yScale = d3.scaleLinear([d3.min(filtro_año, d => d.Valor), d3.max(filtro_año, d => d.Valor)], [height - margin.bottom, margin.top]);
 
+            // Crear la variable para crear grafico Lineas
             const line = d3.line()
                 .x(d => xScale(convertirAMes(d.Parametro) + " - " + d.Agno) + 17)
                 .y(d => yScale(d.Valor));
 
-            // Agrega ejes
+            // Agregar ejes al grafico
             const xAxis = d3.axisBottom(xScale);
             const yAxis = d3.axisLeft(yScale);
 
+            // Pintar el eje X en la grafica
             svg.select("g.x-axis")
                 .attr("transform", `translate(0, ${height - margin.bottom})`)
                 .call(xAxis);
 
+            // Pintar el eje Y en la grafica
             svg.select("g.y-axis")
                 .attr("class", "y-axis")
                 .attr("transform", `translate(${margin.left},0)`)
@@ -76,7 +88,7 @@
                     .attr("text-anchor", "start")
                     .text("↑ Variación Mes (%)"));
 
-
+            // Pintar la linea para cada punto, definiendo grosor y animacion de union de puntos
             svg.select("path")
                 .attr("fill", "none")
                 .attr("stroke", color)
@@ -95,7 +107,7 @@
                 .style("stroke-dashoffset", 0);
 
 
-
+            // Agregar puntos de dispersion a la grafica de lineas
             svg.selectAll("circle")
                 .data(filtro_año)
                 .enter()
@@ -104,6 +116,7 @@
                 .attr("cy", d => yScale(d.Valor))
                 .attr("r", 3);
 
+            // Funcion para trasformar la variable Parametro para los meses de Enero de cada año
             function convertirAMes(valor) {
                 if (valor === "2017" || valor === "2018" || valor === "2019" || valor === "2020" || valor === "2021" || valor === "2022" || valor === "2023") {
                     return "Enero";
@@ -111,25 +124,29 @@
                 return valor;
             }
 
-            //ETIQUETAS DEL EJE X
-            svg.selectAll(".x-axis text") // Selecciona las etiquetas del eje X
+            // Modificar el tamaño y orientacion de las etiquetas del eje X
+            svg.selectAll(".x-axis text")
                 .style("text-anchor", "end")
-                .style("font-size","large") // Alinea el texto al final del elemento
-                .attr("transform", "rotate(-45)") // Rota el texto en sentido antihorario
-                .attr("dx", "-.8em") // Ajusta la posición horizontal
-                .attr("dy", ".15em"); // Ajusta la posición vertical;
+                .style("font-size","large")
+                .attr("transform", "rotate(-45)")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em");
 
+            // Modificar tamaño de las etiquetas del eje Y
             svg.selectAll(".y-axis text")
             .style("font-size","large");
 
+            // Crear variable y etiqueta HTML para añadir el tooltip a la grafica
             const tooltip = svg
                 .append("g")
                 .attr("class", "tooltip")
                 .style("opacity", 0.5);
 
-            const tooltipWidth = 200; // Ancho del tooltip
-            const tooltipHeight = 50; // Altura del tooltip
+            // Configurar el tamaño del tooltip
+            const tooltipWidth = 220;
+            const tooltipHeight = 50;
 
+            // Crear el rectangulo contenedor de los datos del tooltip
             tooltip.append("rect")
                 .attr("width", tooltipWidth)
                 .attr("height", tooltipHeight)
@@ -138,6 +155,7 @@
                 .text("Soy Tooltip")
                 .style("opacity", 0.5);
 
+            // Definir Variables para añadir datos al tooltip
             const textValue = svg.select("g.tooltip")
                 .append("text")
                 .style("font-size","large")
@@ -149,7 +167,7 @@
                 .attr("x", 10)
                 .attr("y", 40);
 
-            // Agregar interacción para mostrar el tooltip
+            // Agregar interacción para mostrar el tooltip cuando se ubica el cursor sobre el punto
             svg.selectAll("circle")
                 .on("mouseover", function (event, d) {
                     const xPos = xScale(convertirAMes(d.Parametro) + " - " + d.Agno) + 17;
@@ -168,18 +186,10 @@
                     tooltip.style("display", "none");
                     tooltip.style("opacity", 0);
                 });
-
-            // filtro_año.forEach(function (d) {
-            //     elementoUl.append("li").text(d.Agno + " - " + convertirAMes(d.Parametro) + " => " + d.Valor);
-            // })
-
-
-            console.log(filtro)
-            console.log(filtro_año);
-
         })
     }
 
+    // Configurar accion del Boton "Aceptar" para guardar los datos del año y variable a mostrar
     BtnSelector.on("click", () => {
         d3.select("svg").remove();
         var filtro = Año.property("value")
@@ -202,6 +212,7 @@
         }
     })
 
+    // Crear funcion para modificar el tema de la pagina entre Modo Claro y Modo Noche
     function loadTheme() {
         const theme = localStorage.getItem("theme") || "light";
         document.body.dataset.bsTheme = theme;
@@ -212,6 +223,7 @@
         }
     }
 
+    // Crear accion para modificar el tema de la pagina
     BtnCambiarTema.on("click", function () {
         const body = d3.select("body");
         const currentTheme = body.attr("data-bs-theme");
